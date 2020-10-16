@@ -1,3 +1,5 @@
+%define debug_package %{nil}
+
 Summary:    A cross-platform inferencing and training accelerator compatible with many popular ML/DNN frameworks, including PyTorch, TensorFlow/Keras, scikit-learn, and more
 Name:       onnxruntime
 Version:    1.5.2
@@ -44,6 +46,10 @@ The development part of the %{name} package
 %license LICENSE
 %doc docs/*
 %doc ThirdPartyNotices.txt
-%{_libdir}/libonnxruntime.so*
+%{_libdir}/libonnxruntime.so.*
+
+%files devel
+%dir %{_includedir}/onnxruntime/
 %{_includedir}/onnxruntime/*
+%{_libdir}/libonnxruntime.so
 
