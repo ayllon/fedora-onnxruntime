@@ -2,7 +2,7 @@
 
 Summary:    A cross-platform inferencing and training accelerator compatible with many popular ML/DNN frameworks, including PyTorch, TensorFlow/Keras, scikit-learn, and more
 Name:       onnxruntime
-Version:    1.5.2
+Version:    1.7.2
 Release:    1%{?dist}
 License:    MIT
 URL:        https://github.com/microsoft/onnxruntime
@@ -53,3 +53,6 @@ The development part of the %{name} package
 %{_includedir}/onnxruntime/*
 %{_libdir}/libonnxruntime.so
 
+%changelog
+* Fri Apr 30 2021 Alejandro Alvarez Ayllon <aalvarez@fedoraproject.org> - 1.7.2-1
+- Release 1.7.2
