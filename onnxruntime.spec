@@ -1,5 +1,3 @@
-%define debug_package %{nil}
-
 Summary:    A cross-platform inferencing and training accelerator compatible with many popular ML/DNN frameworks, including PyTorch, TensorFlow/Keras, scikit-learn, and more
 Name:       onnxruntime
 Version:    1.7.2
@@ -34,10 +32,13 @@ The development part of the %{name} package
 %autosetup -p1
 
 %build
-%cmake -B "%{_vpath_builddir}" -Donnxruntime_DEV_MODE=OFF \
-    -Donnxruntime_BUILD_SHARED_LIB=ON -Donnxruntime_BUILD_UNIT_TESTS=OFF \
-    cmake
-%make_build -C "%{_vpath_builddir}"
+mkdir -p "%{_vpath_builddir}"
+cd "%{_vpath_builddir}"
+cmake -Donnxruntime_BUILD_SHARED_LIB=ON -Donnxruntime_DEV_MODE=OFF -Donnxruntime_BUILD_UNIT_TESTS=OFF \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_INSTALL_PREFIX=%{_prefix} \
+    ../cmake
+%make_build
 
 %install
 %make_install -C "%{_vpath_builddir}"
