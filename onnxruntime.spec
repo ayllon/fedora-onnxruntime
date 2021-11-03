@@ -1,10 +1,13 @@
+%global onnx_version 1.10.1
+
 Summary:    A cross-platform inferencing and training accelerator compatible with many popular ML/DNN frameworks, including PyTorch, TensorFlow/Keras, scikit-learn, and more
 Name:       onnxruntime
-Version:    1.7.2
+Version:    1.9.1
 Release:    1%{?dist}
-License:    MIT
+License:    MIT and ASL 2.0
 URL:        https://github.com/microsoft/onnxruntime
 Source0:    https://github.com/microsoft/onnxruntime/archive/v%{version}/%{name}-%{version}.tar.gz
+Source1:    https://github.com/onnx/onnx/archive/v${onnx_version}/onnx-%{onnx_version}.tar.gz
 
 BuildRequires:  cmake >= 3.13
 BuildRequires:  make
@@ -16,7 +19,12 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-numpy
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-wheel
-
+BuildRequires:  boost-devel
+BuildRequires:  date-devel
+BuildRequires:  flatbuffers-devel
+BuildRequires:  json-devel
+BuildRequires:  protobuf-lite-devel
+BuildRequires:  re2-devel
 
 %description
 %{name} is a cross-platform inferencing and training accelerator compatible with many popular ML/DNN frameworks, including PyTorch, TensorFlow/Keras, scikit-learn, and more.
@@ -30,11 +38,17 @@ The development part of the %{name} package
 
 %prep
 %autosetup -p1
+tar xf "%{SOURCE1}" -C cmake/external/onnx --strip-components 1
 
 %build
 mkdir -p "%{_vpath_builddir}"
 cd "%{_vpath_builddir}"
-cmake -Donnxruntime_BUILD_SHARED_LIB=ON -Donnxruntime_DEV_MODE=OFF -Donnxruntime_BUILD_UNIT_TESTS=OFF \
+cmake -Donnxruntime_BUILD_SHARED_LIB=ON -Donnxruntime_DEV_MODE=OFF \
+    -Donnxruntime_PREFER_SYSTEM_LIB=ON \
+    -Donnxruntime_BUILD_UNIT_TESTS=OFF \
+    -Donnxruntime_BUILD_BENCHMARKS=OFF \
+    -Donnxruntime_USE_PREINSTALLED_EIGEN=ON \
+    -DCPUINFO_SUPPORTED=OFF \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} \
     ../cmake
@@ -55,5 +69,5 @@ cmake -Donnxruntime_BUILD_SHARED_LIB=ON -Donnxruntime_DEV_MODE=OFF -Donnxruntime
 %{_libdir}/libonnxruntime.so
 
 %changelog
-* Fri Apr 30 2021 Alejandro Alvarez Ayllon <aalvarez@fedoraproject.org> - 1.7.2-1
-- Release 1.7.2
+* Wed Nov 03 2021 Alejandro Alvarez Ayllon <aalvarez@fedoraproject.org> - 1.9.1-1
+- Release 1.9.1
