@@ -1,0 +1,11 @@
+--- onnxruntime/core/util/math_cpu.cc.orig	2021-11-03 15:24:06.582718782 +0000
++++ onnxruntime/core/util/math_cpu.cc	2021-11-03 15:24:17.654722301 +0000
+@@ -24,7 +24,7 @@
+ #pragma GCC diagnostic ignored "-Wunused-parameter"
+ #pragma GCC diagnostic ignored "-Wunused-result"
+ #endif
+-#include "Eigen/src/Core/arch/Default/Half.h"
++#include "Eigen/src/Core/arch/CUDA/Half.h"
+ #if defined(__GNUC__)
+ #pragma GCC diagnostic pop
+ #endif
