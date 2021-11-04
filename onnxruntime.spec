@@ -58,8 +58,6 @@ tar xf "%{SOURCE3}" -C cmake/external/optional-lite --strip-components 1
 mkdir -p "%{_vpath_builddir}"
 cd "%{_vpath_builddir}"
 cmake -Donnxruntime_BUILD_SHARED_LIB=ON \
-    -Donnxruntime_EXTENDED_MINIMAL_BUILD=ON \
-    -DADD_DEBUG_INFO_TO_MINIMAL_BUILD=ON \
     -Donnxruntime_DEV_MODE=OFF \
     -Donnxruntime_PREFER_SYSTEM_LIB=ON \
     -Donnxruntime_BUILD_UNIT_TESTS=OFF \
@@ -79,11 +77,13 @@ cmake -Donnxruntime_BUILD_SHARED_LIB=ON \
 %doc docs/*
 %doc ThirdPartyNotices.txt
 %{_libdir}/libonnxruntime.so.*
+%{_libdir}/libonnxruntime_providers_shared.so.*
 
 %files devel
 %dir %{_includedir}/onnxruntime/
 %{_includedir}/onnxruntime/*
 %{_libdir}/libonnxruntime.so
+%{_libdir}/libonnxruntime_providers_shared.so
 %{_libdir}/pkgconfig/libonnxruntime.pc
 
 %changelog
