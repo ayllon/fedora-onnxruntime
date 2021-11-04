@@ -6,7 +6,7 @@ Summary:    A cross-platform inferencing and training accelerator
 Name:       onnxruntime
 Version:    1.9.1
 Release:    1%{?dist}
-License:    MIT and ASL 2.0
+License:    MIT and ASL 2.0 and Boost
 URL:        https://github.com/microsoft/onnxruntime
 Source0:    https://github.com/microsoft/onnxruntime/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:    https://github.com/onnx/onnx/archive/v%{onnx_version}/onnx-%{onnx_version}.tar.gz
