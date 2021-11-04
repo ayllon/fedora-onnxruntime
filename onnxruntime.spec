@@ -34,7 +34,7 @@ Buildrequires:  eigen3-devel >= 1.34
 BuildRequires:  flatbuffers-devel
 BuildRequires:  json-devel
 BuildRequires:  protobuf-lite-devel
-BuildRequires:  re2-devel
+BuildRequires:  pkgconfig(re2)
 
 %description
 %{name} is a cross-platform inferencing and training accelerator compatible
