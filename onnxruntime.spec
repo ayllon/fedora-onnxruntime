@@ -55,9 +55,7 @@ tar xf "%{SOURCE2}" -C cmake/external/SafeInt/safeint --strip-components 1
 tar xf "%{SOURCE3}" -C cmake/external/optional-lite --strip-components 1
 
 %build
-mkdir -p "%{_vpath_builddir}"
-cd "%{_vpath_builddir}"
-cmake -Donnxruntime_BUILD_SHARED_LIB=ON \
+%cmake -Donnxruntime_BUILD_SHARED_LIB=ON \
     -Donnxruntime_DEV_MODE=OFF \
     -Donnxruntime_PREFER_SYSTEM_LIB=ON \
     -Donnxruntime_BUILD_UNIT_TESTS=OFF \
@@ -65,12 +63,14 @@ cmake -Donnxruntime_BUILD_SHARED_LIB=ON \
     -Donnxruntime_USE_PREINSTALLED_EIGEN=ON \
     -Deigen_SOURCE_PATH=/usr/include/eigen3 \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DCMAKE_INSTALL_PREFIX="%{_prefix}" \
-    ../cmake
-%make_build
+%ifarch s390x
+    -Donnxruntime_DISABLE_ORT_FORMAT_LOAD=ON \
+%endif
+    -S cmake
+%cmake_build
 
 %install
-%make_install -C "%{_vpath_builddir}"
+%cmake_install
 
 %files
 %license LICENSE
