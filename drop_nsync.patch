@@ -1,5 +1,5 @@
---- ./include/onnxruntime/core/platform/ort_mutex.h.orig	2021-11-03 14:36:49.232322690 +0000
-+++ ./include/onnxruntime/core/platform/ort_mutex.h	2021-11-03 15:10:49.894459603 +0000
+--- include/onnxruntime/core/platform/ort_mutex.h.orig	2021-11-03 14:36:49.232322690 +0000
++++ include/onnxruntime/core/platform/ort_mutex.h	2021-11-03 15:10:49.894459603 +0000
 @@ -102,13 +102,13 @@
  }
  }  // namespace onnxruntime
@@ -80,3 +80,89 @@
 -}  // namespace onnxruntime
 \ No newline at end of file
 +}  // namespace onnxruntime
+
+--- cmake/onnxruntime_unittests.cmake.orig
++++ cmake/onnxruntime_unittests.cmake
+@@ -571,8 +571,8 @@ if(MSVC)
+                 "$<$<NOT:$<COMPILE_LANGUAGE:CUDA>>:/wd6326>")
+ else()
+   target_compile_definitions(onnxruntime_test_utils PUBLIC -DNSYNC_ATOMIC_CPP11)
+-  target_include_directories(onnxruntime_test_utils PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${ONNXRUNTIME_ROOT}
+-          "${CMAKE_CURRENT_SOURCE_DIR}/external/nsync/public")
++  target_include_directories(onnxruntime_test_utils PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${ONNXRUNTIME_ROOT})
++#          "${CMAKE_CURRENT_SOURCE_DIR}/external/nsync/public")
+ endif()
+ if (onnxruntime_USE_NCCL)
+   target_include_directories(onnxruntime_test_utils PRIVATE ${NCCL_INCLUDE_DIRS})
+@@ -601,8 +601,8 @@ if(MSVC)
+           "$<$<NOT:$<COMPILE_LANGUAGE:CUDA>>:/utf-8>")
+ else()
+   target_compile_definitions(onnx_test_runner_common PUBLIC -DNSYNC_ATOMIC_CPP11)
+-  target_include_directories(onnx_test_runner_common PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${ONNXRUNTIME_ROOT}
+-          "${CMAKE_CURRENT_SOURCE_DIR}/external/nsync/public")
++  target_include_directories(onnx_test_runner_common PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${ONNXRUNTIME_ROOT})
++#          "${CMAKE_CURRENT_SOURCE_DIR}/external/nsync/public")
+ endif()
+ if (MSVC AND NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
+   #TODO: fix the warnings, they are dangerous
+@@ -855,7 +855,7 @@ if (NOT onnxruntime_ENABLE_TRAINING_TORCH_INTEROP)
+     target_include_directories(onnxruntime_mlas_benchmark PRIVATE ${ONNXRUNTIME_ROOT}/core/mlas/inc)
+     target_link_libraries(onnxruntime_mlas_benchmark PRIVATE benchmark::benchmark onnxruntime_util onnxruntime_framework ${ONNXRUNTIME_MLAS_LIBS} onnxruntime_common ${CMAKE_DL_LIBS})
+     if(NOT WIN32)
+-      target_link_libraries(onnxruntime_mlas_benchmark PRIVATE nsync_cpp ${CMAKE_DL_LIBS})
++      target_link_libraries(onnxruntime_mlas_benchmark PRIVATE ${CMAKE_DL_LIBS})
+     endif()
+     set_target_properties(onnxruntime_mlas_benchmark PROPERTIES FOLDER "ONNXRuntimeTest")
+   endif()
+@@ -909,9 +909,9 @@ if(onnxruntime_ENABLE_EAGER_MODE)
+   if(onnxruntime_ENABLE_TRAINING)
+     list(APPEND onnxruntime_eager_mode_libs onnxruntime_training tensorboard)
+   endif()
+-  IF(NOT WIN32)
+-    list(APPEND onnxruntime_eager_mode_libs nsync_cpp)
+-  endif()
++#  IF(NOT WIN32)
++#    list(APPEND onnxruntime_eager_mode_libs nsync_cpp)
++#  endif()
+   target_link_libraries(onnxruntime_eager_mode_test PRIVATE ${onnxruntime_eager_mode_libs} Threads::Threads ${onnxruntime_EXTERNAL_LIBRARIES})
+   if (onnxruntime_ENABLE_TRAINING_TORCH_INTEROP)
+     target_link_libraries(onnxruntime_eager_mode_test PRIVATE Python::Python)
+@@ -964,9 +964,9 @@ if (NOT onnxruntime_ENABLE_TRAINING_TORCH_INTEROP)
+             onnxruntime onnxruntime_flatbuffers  onnx_test_data_proto
+             ${onnxruntime_EXTERNAL_LIBRARIES}
+             ${GETOPT_LIB_WIDE} ${SYS_PATH_LIB} ${CMAKE_DL_LIBS})
+-    if(NOT WIN32)
+-      list(APPEND onnxruntime_perf_test_libs nsync_cpp)
+-    endif()
++#    if(NOT WIN32)
++#      list(APPEND onnxruntime_perf_test_libs nsync_cpp)
++#    endif()
+     if (CMAKE_SYSTEM_NAME STREQUAL "Android")
+       list(APPEND onnxruntime_perf_test_libs ${android_shared_libs})
+     endif()
+@@ -1004,9 +1004,9 @@ if (NOT onnxruntime_ENABLE_TRAINING_TORCH_INTEROP)
+     #################################################################
+     # test inference using shared lib
+     set(onnxruntime_shared_lib_test_LIBS onnxruntime_mocked_allocator onnxruntime_test_utils onnxruntime_common onnx_proto)
+-    if(NOT WIN32)
+-      list(APPEND onnxruntime_shared_lib_test_LIBS nsync_cpp)
+-    endif()
++#    if(NOT WIN32)
++#      list(APPEND onnxruntime_shared_lib_test_LIBS nsync_cpp)
++#    endif()
+     if (onnxruntime_USE_CUDA)
+       list(APPEND onnxruntime_shared_lib_test_LIBS onnxruntime_test_cuda_ops_lib cudart)
+     endif()
+@@ -1106,9 +1106,9 @@ if (NOT onnxruntime_ENABLE_TRAINING_TORCH_INTEROP)
+   target_include_directories(onnxruntime_mlas_test PRIVATE ${ONNXRUNTIME_ROOT}/core/mlas/inc ${ONNXRUNTIME_ROOT}
+           ${CMAKE_CURRENT_BINARY_DIR})
+   set(onnxruntime_mlas_test_libs GTest::gtest GTest::gmock ${ONNXRUNTIME_MLAS_LIBS} onnxruntime_common)
+-  if(NOT WIN32)
+-    list(APPEND onnxruntime_mlas_test_libs nsync_cpp ${CMAKE_DL_LIBS})
+-  endif()
++#  if(NOT WIN32)
++#    list(APPEND onnxruntime_mlas_test_libs nsync_cpp ${CMAKE_DL_LIBS})
++#  endif()
+   if (CMAKE_SYSTEM_NAME STREQUAL "Android")
+     list(APPEND onnxruntime_mlas_test_libs ${android_shared_libs})
+   endif()

@@ -39,6 +39,7 @@ BuildRequires:  flatbuffers-devel
 BuildRequires:  json-devel
 BuildRequires:  protobuf-lite-devel
 BuildRequires:  pkgconfig(re2)
+BuildRequires:  gtest-devel
 
 %description
 %{name} is a cross-platform inferencing and training accelerator compatible
@@ -65,14 +66,17 @@ tar xf "%{SOURCE2}" -C cmake/external/SafeInt/safeint --strip-components 1
 tar xf "%{SOURCE3}" -C cmake/external/optional-lite --strip-components 1
 
 %build
+# Overrides BUILD_SHARED_LIBS flag since onnxruntime compiles individual components as static, and links
+# all together into a single shared library when onnxruntime_BUILD_SHARED_LIB is ON
 %cmake -Donnxruntime_BUILD_SHARED_LIB=ON \
     -Donnxruntime_DEV_MODE=OFF \
     -Donnxruntime_PREFER_SYSTEM_LIB=ON \
-    -Donnxruntime_BUILD_UNIT_TESTS=OFF \
+    -Donnxruntime_BUILD_UNIT_TESTS=ON \
     -Donnxruntime_BUILD_BENCHMARKS=OFF \
     -Donnxruntime_USE_PREINSTALLED_EIGEN=ON \
     -Deigen_SOURCE_PATH=/usr/include/eigen3 \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DBUILD_SHARED_LIBS:BOOL=OFF \
 %ifarch s390x
     -Donnxruntime_DISABLE_ORT_FORMAT_LOAD=ON \
 %endif
@@ -81,6 +85,9 @@ tar xf "%{SOURCE3}" -C cmake/external/optional-lite --strip-components 1
 
 %install
 %cmake_install
+
+%check
+%ctest
 
 %files
 %license LICENSE
@@ -96,7 +103,7 @@ tar xf "%{SOURCE3}" -C cmake/external/optional-lite --strip-components 1
 %{_libdir}/pkgconfig/libonnxruntime.pc
 
 %files doc
-%doc doc/*
+%doc docs/*
 
 %changelog
 * Wed Nov 03 2021 Alejandro Alvarez Ayllon <aalvarez@fedoraproject.org> - 1.9.1-1
