@@ -113,3 +113,16 @@
 
    # On Apple/Unix we don't directly link with this library as we load it with RTLD_GLOBAL, so this is only set to the actual library on WIN32
    set(ONNXRUNTIME_PROVIDERS_SHARED)
+
+--- cmake/onnxruntime_mlas.cmake
++++ cmake/onnxruntime_mlas.cmake
+@@ -276,7 +276,8 @@ else()
+         set(mlas_platform_srcs
+           ${MLAS_SRC_DIR}/power/SgemmKernelPower.cpp
+         )
+-        check_cxx_compiler_flag("-mcpu=power10" HAS_POWER10)
++        #check_cxx_compiler_flag("-mcpu=power10" HAS_POWER10)
++        set(HAS_POWER10 OFF)
+         if(HAS_POWER10)
+           set(CMAKE_REQUIRED_FLAGS "-mcpu=power10")
+           check_cxx_source_compiles("
