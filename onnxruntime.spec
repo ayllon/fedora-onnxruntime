@@ -6,7 +6,11 @@ Summary:    A cross-platform inferencing and training accelerator
 Name:       onnxruntime
 Version:    1.9.1
 Release:    1%{?dist}
-License:    MIT and ASL 2.0 and Boost
+# onnxruntime and SafeInt are MIT
+# onnx is Apache License 2.0
+# optional-lite is Boost Software License 1.0
+# some protobuf helper files files are BSD (protobuf_function.cmake, pb_helper.*)
+License:    MIT and ASL 2.0 and Boost and BSD
 URL:        https://github.com/microsoft/onnxruntime
 Source0:    https://github.com/microsoft/onnxruntime/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:    https://github.com/onnx/onnx/archive/v%{onnx_version}/onnx-%{onnx_version}.tar.gz
@@ -48,6 +52,12 @@ Requires:   %{name}%{_isa} = %{version}-%{release}
 %description devel
 The development part of the %{name} package
 
+%package doc
+Summary:    Documentation files for the %{name} package
+
+%description doc
+Documentation files for the %{name} package
+
 %prep
 %autosetup -p0
 tar xf "%{SOURCE1}" -C cmake/external/onnx --strip-components 1
@@ -74,7 +84,6 @@ tar xf "%{SOURCE3}" -C cmake/external/optional-lite --strip-components 1
 
 %files
 %license LICENSE
-%doc docs/*
 %doc ThirdPartyNotices.txt
 %{_libdir}/libonnxruntime.so.*
 %{_libdir}/libonnxruntime_providers_shared.so.*
@@ -85,6 +94,9 @@ tar xf "%{SOURCE3}" -C cmake/external/optional-lite --strip-components 1
 %{_libdir}/libonnxruntime.so
 %{_libdir}/libonnxruntime_providers_shared.so
 %{_libdir}/pkgconfig/libonnxruntime.pc
+
+%files doc
+%doc doc/*
 
 %changelog
 * Wed Nov 03 2021 Alejandro Alvarez Ayllon <aalvarez@fedoraproject.org> - 1.9.1-1
