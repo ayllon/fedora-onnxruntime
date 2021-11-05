@@ -21,6 +21,8 @@ Source3:    https://github.com/martinmoene/optional-lite/archive/v%{optional_lit
 Patch0:     CMakeLists.patch
 # Use pthreads instead of nsync
 Patch1:     drop_nsync.patch
+# Do not install the unit test
+Patch3:     dont_install_test.patch
 
 BuildRequires:  cmake >= 3.13
 BuildRequires:  make
@@ -40,6 +42,7 @@ BuildRequires:  json-devel
 BuildRequires:  protobuf-lite-devel
 BuildRequires:  pkgconfig(re2)
 BuildRequires:  gtest-devel
+BuildRequires:  gmock-devel
 
 %description
 %{name} is a cross-platform inferencing and training accelerator compatible
@@ -85,6 +88,8 @@ tar xf "%{SOURCE3}" -C cmake/external/optional-lite --strip-components 1
 
 %install
 %cmake_install
+mkdir -p "%{buildroot}/%{_docdir}/"
+cp --preserve=timestamps -r "./docs/" "%{buildroot}/%{_docdir}/%{name}"
 
 %check
 %ctest
@@ -103,7 +108,7 @@ tar xf "%{SOURCE3}" -C cmake/external/optional-lite --strip-components 1
 %{_libdir}/pkgconfig/libonnxruntime.pc
 
 %files doc
-%doc docs/*
+%{_docdir}/%{name}
 
 %changelog
 * Wed Nov 03 2021 Alejandro Alvarez Ayllon <aalvarez@fedoraproject.org> - 1.9.1-1
