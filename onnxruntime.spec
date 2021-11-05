@@ -24,6 +24,10 @@ Patch1:     drop_nsync.patch
 # Do not install the unit test
 Patch3:     dont_install_test.patch
 
+# MLAS is not implemented for s390x
+# https://github.com/microsoft/onnxruntime/blob/master/cmake/onnxruntime_mlas.cmake#L222
+ExcludeArch:    s390x
+
 BuildRequires:  cmake >= 3.13
 BuildRequires:  make
 BuildRequires:  gcc
@@ -80,9 +84,6 @@ tar xf "%{SOURCE3}" -C cmake/external/optional-lite --strip-components 1
     -Deigen_SOURCE_PATH=/usr/include/eigen3 \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
-%ifarch s390x
-    -Donnxruntime_DISABLE_ORT_FORMAT_LOAD=ON \
-%endif
     -S cmake
 %cmake_build
 
