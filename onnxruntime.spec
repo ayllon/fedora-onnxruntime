@@ -26,7 +26,8 @@ Patch3:     dont_install_test.patch
 
 # MLAS is not implemented for s390x
 # https://github.com/microsoft/onnxruntime/blob/master/cmake/onnxruntime_mlas.cmake#L222
-ExcludeArch:    s390x
+# The memory exhausted when building for armv7hl
+ExcludeArch:    s390x %{arm}
 
 BuildRequires:  cmake >= 3.13
 BuildRequires:  make
