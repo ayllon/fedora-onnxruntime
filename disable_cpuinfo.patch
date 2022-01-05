@@ -1,0 +1,13 @@
+diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
+index 3ca6fb0da..dea8bcaef 100644
+--- a/cmake/CMakeLists.txt
++++ b/cmake/CMakeLists.txt
+@@ -899,6 +899,8 @@ else()
+     endif()
+ endif()
+ 
++set(CPUINFO_SUPPORTED FALSE)
++
+ # TODO  do we have to add target_include_directories to each project that uses this?
+ if (CPUINFO_SUPPORTED)
+   set(PYTORCH_CPUINFO_DIR external/pytorch_cpuinfo)

@@ -1,0 +1,14 @@
+diff --git a/cmake/onnxruntime_mlas.cmake b/cmake/onnxruntime_mlas.cmake
+index 2fe9bd4e2..4f14d45f7 100644
+--- a/cmake/onnxruntime_mlas.cmake
++++ b/cmake/onnxruntime_mlas.cmake
+@@ -300,7 +300,8 @@ else()
+           ${MLAS_SRC_DIR}/power/DgemmKernelPower.cpp
+         )
+         set_source_files_properties(${MLAS_SRC_DIR}/power/SgemmKernelPower.cpp PROPERTIES COMPILE_FLAGS "-DSINGLE")
+-        check_cxx_compiler_flag("-mcpu=power10" HAS_POWER10)
++        #check_cxx_compiler_flag("-mcpu=power10" HAS_POWER10)
++        set(HAS_POWER10 OFF)
+         if(HAS_POWER10)
+           set(CMAKE_REQUIRED_FLAGS "-mcpu=power10")
+           check_cxx_source_compiles("

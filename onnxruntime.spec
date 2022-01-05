@@ -1,10 +1,8 @@
-%global onnx_version 1.10.1
-%global safeint_version 3.0.26
-%global optional_lite_version 3.5.0
+%global onnx_version 1.10.2
 
 Summary:    A cross-platform inferencing and training accelerator
 Name:       onnxruntime
-Version:    1.9.1
+Version:    1.10.0
 Release:    1%{?dist}
 # onnxruntime and SafeInt are MIT
 # onnx is Apache License 2.0
@@ -14,15 +12,18 @@ License:    MIT and ASL 2.0 and Boost and BSD
 URL:        https://github.com/microsoft/onnxruntime
 Source0:    https://github.com/microsoft/onnxruntime/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:    https://github.com/onnx/onnx/archive/v%{onnx_version}/onnx-%{onnx_version}.tar.gz
-# Header-only libraries
-Source2:    https://github.com/dcleblanc/SafeInt/archive/%{safeint_version}/SafeInt-%{safeint_version}.tar.gz
-Source3:    https://github.com/martinmoene/optional-lite/archive/v%{optional_lite_version}/optional-lite-%{optional_lite_version}.tar.gz
 # Patch the CMakeLists.txt to use local libraries
-Patch0:     CMakeLists.patch
+Patch0:     use_system_libs.patch
+# Add an option to not install the tests
+Patch1:     dont_install_tests.patch
 # Use pthreads instead of nsync
-Patch1:     drop_nsync.patch
-# Do not install the unit test
-Patch3:     dont_install_test.patch
+Patch2:     drop_nsync.patch
+# Fedora targets power8 or higher
+Patch3:     disable_power10.patch
+# cpuinfo not available
+Patch4:     disable_cpuinfo.patch
+# Versioned libonnxruntime_providers_shared.so
+Patch5:     versioned_onnxruntime_providers_shared.patch
 
 # MLAS is not implemented for s390x
 # https://github.com/microsoft/onnxruntime/blob/master/cmake/onnxruntime_mlas.cmake#L222
@@ -68,10 +69,8 @@ Summary:    Documentation files for the %{name} package
 Documentation files for the %{name} package
 
 %prep
-%autosetup -p0
+%autosetup -p1
 tar xf "%{SOURCE1}" -C cmake/external/onnx --strip-components 1
-tar xf "%{SOURCE2}" -C cmake/external/SafeInt/safeint --strip-components 1
-tar xf "%{SOURCE3}" -C cmake/external/optional-lite --strip-components 1
 
 %build
 # Overrides BUILD_SHARED_LIBS flag since onnxruntime compiles individual components as static, and links
@@ -99,8 +98,8 @@ cp --preserve=timestamps -r "./docs/" "%{buildroot}/%{_docdir}/%{name}"
 %files
 %license LICENSE
 %doc ThirdPartyNotices.txt
-%{_libdir}/libonnxruntime.so.*
-%{_libdir}/libonnxruntime_providers_shared.so.*
+%{_libdir}/libonnxruntime.so.%{version}
+%{_libdir}/libonnxruntime_providers_shared.so.%{version}
 
 %files devel
 %dir %{_includedir}/onnxruntime/
@@ -113,5 +112,8 @@ cp --preserve=timestamps -r "./docs/" "%{buildroot}/%{_docdir}/%{name}"
 %{_docdir}/%{name}
 
 %changelog
+* Wed Jan 05 2022 Alejandro Alvarez Ayllon <aalvarez@fedoraproject.org> - 1.10.0-1
+- Release 1.10.0
+
 * Wed Nov 03 2021 Alejandro Alvarez Ayllon <aalvarez@fedoraproject.org> - 1.9.1-1
 - Release 1.9.1
