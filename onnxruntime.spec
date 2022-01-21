@@ -46,7 +46,7 @@ Buildrequires:  eigen3-devel >= 1.34
 BuildRequires:  flatbuffers-devel
 BuildRequires:  json-devel
 BuildRequires:  protobuf-lite-devel
-BuildRequires:  pkgconfig(re2)
+BuildRequires:  re2 >= 20211101
 BuildRequires:  gtest-devel
 BuildRequires:  gmock-devel
 
