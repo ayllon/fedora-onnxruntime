@@ -11,3 +11,17 @@ index 3ca6fb0da..dea8bcaef 100644
  # TODO  do we have to add target_include_directories to each project that uses this?
  if (CPUINFO_SUPPORTED)
    set(PYTORCH_CPUINFO_DIR external/pytorch_cpuinfo)
+
+diff --git a/cmake/onnxruntime_common.cmake b/cmake/onnxruntime_common.cmake
+index 9b8b5bf81..5f1aa5c6f 100644
+--- a/cmake/onnxruntime_common.cmake
++++ b/cmake/onnxruntime_common.cmake
+@@ -203,7 +203,7 @@ elseif(NOT onnxruntime_BUILD_WEBASSEMBLY)
+ endif()
+ 
+ 
+-if (ARM64 OR ARM OR X86 OR X64 OR X86_64)
++if (FALSE) #ARM64 OR ARM OR X86 OR X64 OR X86_64)
+   if(WINDOWS_STORE OR (WIN32 AND NOT CMAKE_CXX_STANDARD_LIBRARIES MATCHES kernel32.lib) OR ((ARM64 OR ARM) AND MSVC))
+     # msvc compiler report syntax error with cpuinfo arm source files
+     # and cpuinfo does not have code for getting arm uarch info under windows

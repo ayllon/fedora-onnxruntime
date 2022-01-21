@@ -17,6 +17,19 @@ index 3ca6fb0da..39e2b4bb9 100644
 -
  # External dependencies
  list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/external)
+
+diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
+index 553fca1c8..fa2ef048d 100644
+--- a/cmake/CMakeLists.txt
++++ b/cmake/CMakeLists.txt
+@@ -1842,7 +1842,7 @@ if (WIN32)
+   list(APPEND onnxruntime_EXTERNAL_LIBRARIES ${SYS_PATH_LIB} Shlwapi)
+   list(APPEND onnxruntime_EXTERNAL_LIBRARIES debug Dbghelp)
+ else()
+-  list(APPEND onnxruntime_EXTERNAL_LIBRARIES nsync_cpp)
++#  list(APPEND onnxruntime_EXTERNAL_LIBRARIES nsync_cpp)
+   list(APPEND onnxruntime_EXTERNAL_LIBRARIES ${CMAKE_DL_LIBS} Threads::Threads)
+ endif()
  
 diff --git a/cmake/onnxruntime_unittests.cmake b/cmake/onnxruntime_unittests.cmake
 index 15bde27c8..974aef30c 100644
