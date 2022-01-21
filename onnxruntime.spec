@@ -1,4 +1,5 @@
 %global onnx_version 1.10.2
+%global safeint_version 3.0.26
 
 Summary:    A cross-platform inferencing and training accelerator
 Name:       onnxruntime
@@ -12,6 +13,8 @@ License:    MIT and ASL 2.0 and Boost and BSD
 URL:        https://github.com/microsoft/onnxruntime
 Source0:    https://github.com/microsoft/onnxruntime/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:    https://github.com/onnx/onnx/archive/v%{onnx_version}/onnx-%{onnx_version}.tar.gz
+# Header-only libraries
+Source2:    https://github.com/dcleblanc/SafeInt/archive/%{safeint_version}/SafeInt-%{safeint_version}.tar.gz
 # Patch the CMakeLists.txt to use local libraries
 Patch0:     use_system_libs.patch
 # Add an option to not install the tests
@@ -71,6 +74,7 @@ Documentation files for the %{name} package
 %prep
 %autosetup -p1
 tar xf "%{SOURCE1}" -C cmake/external/onnx --strip-components 1
+tar xf "%{SOURCE2}" -C cmake/external/SafeInt/safeint --strip-components 1
 
 %build
 # Overrides BUILD_SHARED_LIBS flag since onnxruntime compiles individual components as static, and links
