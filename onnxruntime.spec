@@ -41,6 +41,7 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-numpy
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-wheel
+BuildRequires:  abseil-cpp-devel
 BuildRequires:  boost-devel >= 1.66
 BuildRequires:  date-devel
 Buildrequires:  eigen3-devel >= 1.34
@@ -90,6 +91,7 @@ tar xf "%{SOURCE2}" -C cmake/external/SafeInt/safeint --strip-components 1
     -Donnxruntime_USE_PREINSTALLED_EIGEN=ON \
     -Donnxruntime_ENABLE_CPUINFO=OFF \
     -Deigen_SOURCE_PATH=/usr/include/eigen3 \
+    -Donnxruntime_DISABLE_ABSEIL=ON \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
     -S cmake
