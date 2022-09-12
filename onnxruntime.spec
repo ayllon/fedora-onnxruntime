@@ -25,6 +25,8 @@ Patch2:     disable_power10.patch
 Patch3:     versioned_onnxruntime_providers_shared.patch
 # Flatbuffers => FlatBuffers
 Patch4:     flatbuffers_config.patch
+# With CPUINFO unavailable, we can't call its function on arm!
+Patch5:     cpuid_arm.patch
 
 # MLAS is not implemented for s390x
 # https://github.com/microsoft/onnxruntime/blob/master/cmake/onnxruntime_mlas.cmake#L222
