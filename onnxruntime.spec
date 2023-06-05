@@ -1,9 +1,6 @@
-%global onnx_version 1.12.0
-%global safeint_version 3.0.26
-
 Summary:    A cross-platform inferencing and training accelerator
 Name:       onnxruntime
-Version:    1.12.1
+Version:    1.15.0
 Release:    1%{?dist}
 # onnxruntime and SafeInt are MIT
 # onnx is Apache License 2.0
@@ -12,9 +9,7 @@ Release:    1%{?dist}
 License:    MIT and ASL 2.0 and Boost and BSD
 URL:        https://github.com/microsoft/onnxruntime
 Source0:    https://github.com/microsoft/onnxruntime/archive/v%{version}/%{name}-%{version}.tar.gz
-Source1:    https://github.com/onnx/onnx/archive/v%{onnx_version}/onnx-%{onnx_version}.tar.gz
-# Header-only libraries
-Source2:    https://github.com/dcleblanc/SafeInt/archive/%{safeint_version}/SafeInt-%{safeint_version}.tar.gz
+
 # Add an option to not install the tests
 Patch0:     dont_install_tests.patch
 # Use pthreads instead of nsync
@@ -39,6 +34,7 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  zlib-devel
 BuildRequires:  bzip2
+BuildRequires:	onnx-devel
 BuildRequires:  python3-devel
 BuildRequires:  python3-numpy
 BuildRequires:  python3-setuptools
@@ -52,6 +48,7 @@ BuildRequires:  flatbuffers-devel
 BuildRequires:  json-devel
 BuildRequires:  protobuf-lite-devel
 BuildRequires:  re2-devel >= 20211101
+BuildRequires:  safeint-devel
 BuildRequires:  gtest-devel
 BuildRequires:  gmock-devel
 
@@ -124,6 +121,9 @@ cp --preserve=timestamps -r "./docs/" "%{buildroot}/%{_docdir}/%{name}"
 %{_docdir}/%{name}
 
 %changelog
+* Mon Jun 05 2023 Alejandro Álvarez Ayllón <a.alvarezayllon@gmail.com> - 1.15.0-1
+- Release 1.15.0
+
 * Wed Jan 05 2022 Alejandro Alvarez Ayllon <aalvarez@fedoraproject.org> - 1.10.0-1
 - Release 1.10.0
 
