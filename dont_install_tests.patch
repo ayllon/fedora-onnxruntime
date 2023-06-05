@@ -1,20 +1,26 @@
+commit 0d79eafe6fd027adb197c543df39cbdda6e0cbec
+Author: Alejandro Álvarez Ayllón <a.alvarezayllon@gmail.com>
+Date:   Mon Jun 5 11:25:53 2023 +0000
+
+    Don't install tests
+
 diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
-index 3a6e83b88..3ca6fb0da 100644
+index 2e54063598..f97cc69249 100644
 --- a/cmake/CMakeLists.txt
 +++ b/cmake/CMakeLists.txt
-@@ -54,6 +54,7 @@ option(onnxruntime_USE_RKNPU "Build with RKNPU support" OFF)
+@@ -78,6 +78,7 @@ option(onnxruntime_USE_RKNPU "Build with RKNPU support" OFF)
  option(onnxruntime_USE_DNNL "Build with DNNL support" OFF)
- option(onnxruntime_DEV_MODE "Enable developer warnings and treat most of them as error." OFF)
+ option(onnxruntime_USE_JSEP "Build with JavaScript implemented kernels support" OFF)
  option(onnxruntime_BUILD_UNIT_TESTS "Build ONNXRuntime unit tests" ON)
 +option(onnxruntime_INSTALL_UNIT_TESTS "Install ONNXRuntime unit tests" ON)
  option(onnxruntime_BUILD_CSHARP "Build C# library" OFF)
  option(onnxruntime_BUILD_OBJC "Build Objective-C library" OFF)
  option(onnxruntime_USE_PREINSTALLED_EIGEN "Use pre-installed EIGEN. Need to provide eigen_SOURCE_PATH if turn this on." OFF)
 diff --git a/cmake/onnxruntime_unittests.cmake b/cmake/onnxruntime_unittests.cmake
-index 11c94655e..15bde27c8 100644
+index 9347be180d..09723613e4 100644
 --- a/cmake/onnxruntime_unittests.cmake
 +++ b/cmake/onnxruntime_unittests.cmake
-@@ -833,11 +833,13 @@ if (onnxruntime_USE_TVM)
+@@ -1027,11 +1027,13 @@ if (onnxruntime_USE_TVM)
    endif()
  endif()
  

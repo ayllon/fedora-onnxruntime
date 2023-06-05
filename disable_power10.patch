@@ -1,11 +1,17 @@
+commit 6b4c843882404df8de4c99b256d876c007d6cd43
+Author: Alejandro Álvarez Ayllón <a.alvarezayllon@gmail.com>
+Date:   Mon Jun 5 11:22:51 2023 +0000
+
+    Disable power10
+
 diff --git a/cmake/onnxruntime_mlas.cmake b/cmake/onnxruntime_mlas.cmake
-index e2c297c0c..c4b722e60 100644
+index 6828dfd076..b8761e6845 100644
 --- a/cmake/onnxruntime_mlas.cmake
 +++ b/cmake/onnxruntime_mlas.cmake
-@@ -325,7 +325,8 @@ else()
+@@ -388,7 +388,8 @@ else()
            set_source_files_properties(${MLAS_SRC_DIR}/power/QuantizePowerVSX.cpp PROPERTIES COMPILE_FLAGS "-mcpu=power9")
          endif()
-
+ 
 -        check_cxx_compiler_flag("-mcpu=power10" HAS_POWER10)
 +        #check_cxx_compiler_flag("-mcpu=power10" HAS_POWER10)
 +        set(HAS_POWER10 OFF)

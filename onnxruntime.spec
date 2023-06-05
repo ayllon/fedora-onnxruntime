@@ -12,16 +12,10 @@ Source0:    https://github.com/microsoft/onnxruntime/archive/v%{version}/%{name}
 
 # Add an option to not install the tests
 Patch0:     dont_install_tests.patch
-# Use pthreads instead of nsync
-Patch1:     drop_nsync.patch
 # Fedora targets power8 or higher
 Patch2:     disable_power10.patch
 # Versioned libonnxruntime_providers_shared.so
 Patch3:     versioned_onnxruntime_providers_shared.patch
-# Flatbuffers => FlatBuffers
-Patch4:     flatbuffers_config.patch
-# With CPUINFO unavailable, we can't call its function on arm!
-Patch5:     cpuid_arm.patch
 
 # MLAS is not implemented for s390x
 # https://github.com/microsoft/onnxruntime/blob/master/cmake/onnxruntime_mlas.cmake#L222
@@ -72,8 +66,6 @@ Documentation files for the %{name} package
 
 %prep
 %autosetup -p1
-tar xf "%{SOURCE1}" -C cmake/external/onnx --strip-components 1
-tar xf "%{SOURCE2}" -C cmake/external/SafeInt/safeint --strip-components 1
 
 %build
 # Re-generate flatbuffer headers
@@ -82,8 +74,6 @@ tar xf "%{SOURCE2}" -C cmake/external/SafeInt/safeint --strip-components 1
 # Overrides BUILD_SHARED_LIBS flag since onnxruntime compiles individual components as static, and links
 # all together into a single shared library when onnxruntime_BUILD_SHARED_LIB is ON
 %cmake -Donnxruntime_BUILD_SHARED_LIB=ON \
-    -Donnxruntime_DEV_MODE=OFF \
-    -Donnxruntime_PREFER_SYSTEM_LIB=ON \
     -Donnxruntime_BUILD_UNIT_TESTS=ON \
     -Donnxruntime_INSTALL_UNIT_TESTS=OFF \
     -Donnxruntime_BUILD_BENCHMARKS=OFF \
@@ -92,7 +82,6 @@ tar xf "%{SOURCE2}" -C cmake/external/SafeInt/safeint --strip-components 1
     -Deigen_SOURCE_PATH=/usr/include/eigen3 \
     -Donnxruntime_DISABLE_ABSEIL=ON \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DBUILD_SHARED_LIBS:BOOL=OFF \
     -S cmake
 %cmake_build
 
