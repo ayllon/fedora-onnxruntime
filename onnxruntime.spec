@@ -12,6 +12,8 @@ Source0:    https://github.com/microsoft/onnxruntime/archive/v%{version}/%{name}
 
 # Add an option to not install the tests
 Patch0:     dont_install_tests.patch
+# Use the system flatbuffers
+Patch1:	    system-flatbuffers.patch
 # Fedora targets power8 or higher
 Patch2:     disable_power10.patch
 # Versioned libonnxruntime_providers_shared.so

@@ -1,0 +1,28 @@
+commit 557bfe25e435c21ac22567b6b7819561626a8a75
+Author: Alejandro Álvarez Ayllón <a.alvarezayllon@gmail.com>
+Date:   Mon Jun 5 12:10:52 2023 +0000
+
+    Flatbuffers
+
+diff --git a/cmake/external/onnxruntime_external_deps.cmake b/cmake/external/onnxruntime_external_deps.cmake
+index 9effd1a2db..d7c6057ab4 100644
+--- a/cmake/external/onnxruntime_external_deps.cmake
++++ b/cmake/external/onnxruntime_external_deps.cmake
+@@ -97,7 +97,7 @@ FetchContent_Declare(
+     flatbuffers
+     URL ${DEP_URL_flatbuffers}
+     URL_HASH SHA1=${DEP_SHA1_flatbuffers}
+-    FIND_PACKAGE_ARGS 1.12.0...<2.0.0 NAMES Flatbuffers
++    FIND_PACKAGE_ARGS 1.12.0...<2.0.0 NAMES FlatBuffers
+ )
+ 
+ # Download a protoc binary from Internet if needed
+@@ -328,6 +328,8 @@ namespace std { using ::getenv; }
+       target_compile_options(flatc PRIVATE /FI${CMAKE_BINARY_DIR}/gdk_cstdlib_wrapper.h)
+     endif()
+   endif()
++else()
++  add_library(flatbuffers::flatbuffers ALIAS flatbuffers::flatbuffers_shared)
+ endif()
+ 
+ if (onnxruntime_BUILD_UNIT_TESTS)
