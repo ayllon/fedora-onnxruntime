@@ -1,6 +1,6 @@
 Summary:    A cross-platform inferencing and training accelerator
 Name:       onnxruntime
-Version:    1.15.0
+Version:    1.14.0
 Release:    1%{?dist}
 # onnxruntime and SafeInt are MIT
 # onnx is Apache License 2.0
@@ -14,10 +14,12 @@ Source0:    https://github.com/microsoft/onnxruntime/archive/v%{version}/%{name}
 Patch0:     dont_install_tests.patch
 # Use the system flatbuffers
 Patch1:	    system-flatbuffers.patch
+# Use the system onnx
+Patch2:     system-onnx.patch
 # Fedora targets power8 or higher
-Patch2:     disable_power10.patch
+Patch3:     disable_power10.patch
 # Versioned libonnxruntime_providers_shared.so
-Patch3:     versioned_onnxruntime_providers_shared.patch
+Patch4:     versioned_onnxruntime_providers_shared.patch
 
 # MLAS is not implemented for s390x
 # https://github.com/microsoft/onnxruntime/blob/master/cmake/onnxruntime_mlas.cmake#L222
@@ -30,7 +32,7 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  zlib-devel
 BuildRequires:  bzip2
-BuildRequires:	onnx-devel
+BuildRequires:	onnx-devel = %{version}
 BuildRequires:  python3-devel
 BuildRequires:  python3-numpy
 BuildRequires:  python3-setuptools
@@ -112,8 +114,8 @@ cp --preserve=timestamps -r "./docs/" "%{buildroot}/%{_docdir}/%{name}"
 %{_docdir}/%{name}
 
 %changelog
-* Mon Jun 05 2023 Alejandro Álvarez Ayllón <a.alvarezayllon@gmail.com> - 1.15.0-1
-- Release 1.15.0
+* Mon Jun 05 2023 Alejandro Álvarez Ayllón <a.alvarezayllon@gmail.com> - 1.14.0-1
+- Release 1.14.0
 
 * Wed Jan 05 2022 Alejandro Alvarez Ayllon <aalvarez@fedoraproject.org> - 1.10.0-1
 - Release 1.10.0
