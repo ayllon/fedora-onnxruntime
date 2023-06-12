@@ -1,6 +1,6 @@
 Summary:    A cross-platform inferencing and training accelerator
 Name:       onnxruntime
-Version:    1.14.0
+Version:    1.15.0
 Release:    1%{?dist}
 # onnxruntime and SafeInt are MIT
 # onnx is Apache License 2.0
@@ -14,12 +14,18 @@ Source0:    https://github.com/microsoft/onnxruntime/archive/v%{version}/%{name}
 Patch0:     dont_install_tests.patch
 # Use the system flatbuffers
 Patch1:	    system-flatbuffers.patch
+# Use the system protobuf
+Patch2:     system-protobuf.patch
 # Use the system onnx
-Patch2:     system-onnx.patch
+Patch3:     system-onnx.patch
 # Fedora targets power8 or higher
-Patch3:     disable_power10.patch
+Patch4:     disable_power10.patch
+# Do not use nsync
+Patch5:     no_nsync.patch
+# Do not link against WIL
+Patch6:      remove_wil.patch
 # Versioned libonnxruntime_providers_shared.so
-Patch4:     versioned_onnxruntime_providers_shared.patch
+Patch7:     versioned_onnxruntime_providers_shared.patch
 
 # MLAS is not implemented for s390x
 # https://github.com/microsoft/onnxruntime/blob/master/cmake/onnxruntime_mlas.cmake#L222
@@ -30,25 +36,27 @@ BuildRequires:  cmake >= 3.13
 BuildRequires:  make
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  zlib-devel
+BuildRequires:	onnx-devel = 1.14.0
+BuildRequires:  abseil-cpp-devel
+BuildRequires:  boost-devel >= 1.66
 BuildRequires:  bzip2
-BuildRequires:	onnx-devel = %{version}
+BuildRequires:  date-devel
+BuildRequires:  flatbuffers-compiler
+BuildRequires:  flatbuffers-devel
+BuildRequires:  gmock-devel
+BuildRequires:  gsl-devel
+BuildRequires:  gtest-devel
+BuildRequires:  guidelines-support-library-devel
+BuildRequires:  json-devel
+BuildRequires:  protobuf-lite-devel
 BuildRequires:  python3-devel
 BuildRequires:  python3-numpy
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-wheel
-BuildRequires:  abseil-cpp-devel
-BuildRequires:  boost-devel >= 1.66
-BuildRequires:  date-devel
-Buildrequires:  eigen3-devel >= 1.34
-BuildRequires:  flatbuffers-compiler
-BuildRequires:  flatbuffers-devel
-BuildRequires:  json-devel
-BuildRequires:  protobuf-lite-devel
 BuildRequires:  re2-devel >= 20211101
 BuildRequires:  safeint-devel
-BuildRequires:  gtest-devel
-BuildRequires:  gmock-devel
+BuildRequires:  zlib-devel
+Buildrequires:  eigen3-devel >= 1.34
 
 %description
 %{name} is a cross-platform inferencing and training accelerator compatible
@@ -76,8 +84,10 @@ Documentation files for the %{name} package
 %{__python3} onnxruntime/core/flatbuffers/schema/compile_schema.py --flatc %{_bindir}/flatc
 
 # Overrides BUILD_SHARED_LIBS flag since onnxruntime compiles individual components as static, and links
-# all together into a single shared library when onnxruntime_BUILD_SHARED_LIB is ON
-%cmake -Donnxruntime_BUILD_SHARED_LIB=ON \
+# all together into a single shared library when onnxruntime_BUILD_SHARED_LIB is ON.
+# The array-bounds and dangling-reference checks have false positives.
+%cmake -DCMAKE_CXX_FLAGS="-Wno-error=dangling-reference -Wno-error=array-bounds=" \
+    -Donnxruntime_BUILD_SHARED_LIB=ON \
     -Donnxruntime_BUILD_UNIT_TESTS=ON \
     -Donnxruntime_INSTALL_UNIT_TESTS=OFF \
     -Donnxruntime_BUILD_BENCHMARKS=OFF \
@@ -114,8 +124,8 @@ cp --preserve=timestamps -r "./docs/" "%{buildroot}/%{_docdir}/%{name}"
 %{_docdir}/%{name}
 
 %changelog
-* Mon Jun 05 2023 Alejandro Álvarez Ayllón <a.alvarezayllon@gmail.com> - 1.14.0-1
-- Release 1.14.0
+* Mon Jun 05 2023 Alejandro Álvarez Ayllón <a.alvarezayllon@gmail.com> - 1.15.0-1
+- Release 1.15.0
 
 * Wed Jan 05 2022 Alejandro Alvarez Ayllon <aalvarez@fedoraproject.org> - 1.10.0-1
 - Release 1.10.0

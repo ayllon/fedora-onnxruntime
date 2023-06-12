@@ -1,0 +1,43 @@
+commit ce010e097dc041c7650235c887a456d0f624f802
+Author: Alejandro Álvarez Ayllón <a.alvarezayllon@gmail.com>
+Date:   Mon Jun 5 12:51:36 2023 +0000
+
+    System protobuf
+
+diff --git a/cmake/external/onnxruntime_external_deps.cmake b/cmake/external/onnxruntime_external_deps.cmake
+index d7c6057ab4..f2aa9a4c46 100644
+--- a/cmake/external/onnxruntime_external_deps.cmake
++++ b/cmake/external/onnxruntime_external_deps.cmake
+@@ -147,22 +147,8 @@ if(Patch_FOUND)
+ else()
+  set(ONNXRUNTIME_PROTOBUF_PATCH_COMMAND "")
+ endif()
+-FetchContent_Declare(
+-  Protobuf
+-  URL ${DEP_URL_protobuf}
+-  URL_HASH SHA1=${DEP_SHA1_protobuf}
+-  PATCH_COMMAND ${ONNXRUNTIME_PROTOBUF_PATCH_COMMAND}
+-  FIND_PACKAGE_ARGS 3.21.12 NAMES Protobuf
+-)
+-set(protobuf_BUILD_TESTS OFF CACHE BOOL "Build protobuf tests" FORCE)
+-if (CMAKE_SYSTEM_NAME STREQUAL "Android")
+-  set(protobuf_BUILD_PROTOC_BINARIES OFF CACHE BOOL "Build protobuf tests" FORCE)
+-  set(protobuf_WITH_ZLIB OFF CACHE BOOL "Build with zlib support" FORCE)
+-endif()
+-if (onnxruntime_DISABLE_RTTI)
+-  set(protobuf_DISABLE_RTTI ON CACHE BOOL "Remove runtime type information in the binaries" FORCE)
+-endif()
+ 
++find_package(Protobuf REQUIRED)
+ include(protobuf_function)
+ #protobuf end
+ 
+@@ -303,7 +289,7 @@ FetchContent_Declare(
+ )
+ 
+ # The next line will generate an error message "fatal: not a git repository", but it is ok. It is from flatbuffers
+-onnxruntime_fetchcontent_makeavailable(Protobuf nlohmann_json mp11 re2 safeint GSL flatbuffers)
++onnxruntime_fetchcontent_makeavailable(nlohmann_json mp11 re2 safeint GSL flatbuffers)
+ if(NOT flatbuffers_FOUND)
+   if(NOT TARGET flatbuffers::flatbuffers)
+     add_library(flatbuffers::flatbuffers ALIAS flatbuffers)

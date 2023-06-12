@@ -1,14 +1,14 @@
-commit 464434e5659084f7622856cd5128e41dca01251a
+commit e5b81f982df85abcba21ac9110ed07767623c569
 Author: Alejandro Alvarez Ayllon <a.alvarezayllon@gmail.com>
 Date:   Wed Jun 7 14:02:37 2023 +0000
 
     Use system ONNX
 
 diff --git a/cmake/external/onnxruntime_external_deps.cmake b/cmake/external/onnxruntime_external_deps.cmake
-index 591a51d6e8..336bea3168 100644
+index f2aa9a4c46..d3d28ce5d3 100644
 --- a/cmake/external/onnxruntime_external_deps.cmake
 +++ b/cmake/external/onnxruntime_external_deps.cmake
-@@ -355,11 +355,12 @@ endif()
+@@ -402,11 +402,12 @@ endif()
  include(eigen)
  include(wil)
  
@@ -26,7 +26,7 @@ index 591a51d6e8..336bea3168 100644
  
  set(GSL_TARGET "Microsoft.GSL::GSL")
  set(GSL_INCLUDE_DIR "$<TARGET_PROPERTY:${GSL_TARGET},INTERFACE_INCLUDE_DIRECTORIES>")
-@@ -394,10 +395,10 @@ set(onnxruntime_EXTERNAL_LIBRARIES ${onnxruntime_EXTERNAL_LIBRARIES_XNNPACK} WIL
+@@ -441,10 +442,10 @@ set(onnxruntime_EXTERNAL_LIBRARIES ${onnxruntime_EXTERNAL_LIBRARIES_XNNPACK} WIL
  # The other libs do not have the problem. All the sources are already there. We can compile them in any order.
  set(onnxruntime_EXTERNAL_DEPENDENCIES onnx_proto flatbuffers::flatbuffers)
  

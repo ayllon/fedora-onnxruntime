@@ -1,0 +1,67 @@
+commit a3cc42aeae46faf5284f04b35c9bbdc17f74b916
+Author: Alejandro Alvarez Ayllon <a.alvarezayllon@gmail.com>
+Date:   Mon Jun 12 13:39:40 2023 +0000
+
+    Disable linking against WIL
+
+diff --git a/cmake/external/onnxruntime_external_deps.cmake b/cmake/external/onnxruntime_external_deps.cmake
+index d3d28ce5d3..99de683bd1 100644
+--- a/cmake/external/onnxruntime_external_deps.cmake
++++ b/cmake/external/onnxruntime_external_deps.cmake
+@@ -400,7 +400,7 @@ endif()
+ 
+ 
+ include(eigen)
+-include(wil)
++#include(wil)
+ 
+ #if (NOT onnxruntime_MINIMAL_BUILD)
+ #    onnxruntime_fetchcontent_makeavailable(onnx)
+@@ -437,7 +437,7 @@ endif()
+ #onnxruntime_EXTERNAL_LIBRARIES could contain onnx, onnx_proto,libprotobuf, cuda/cudnn,
+ # dnnl/mklml, onnxruntime_codegen_tvm, tvm and pthread
+ # pthread is always at the last
+-set(onnxruntime_EXTERNAL_LIBRARIES ${onnxruntime_EXTERNAL_LIBRARIES_XNNPACK} WIL::WIL nlohmann_json::nlohmann_json onnx onnx_proto ${PROTOBUF_LIB} re2::re2 Boost::mp11 safeint_interface flatbuffers::flatbuffers ${GSL_TARGET} ${ABSEIL_LIBS} date_interface)
++set(onnxruntime_EXTERNAL_LIBRARIES ${onnxruntime_EXTERNAL_LIBRARIES_XNNPACK} nlohmann_json::nlohmann_json onnx onnx_proto ${PROTOBUF_LIB} re2::re2 Boost::mp11 safeint_interface flatbuffers::flatbuffers ${GSL_TARGET} ${ABSEIL_LIBS} date_interface)
+ # The source code of onnx_proto is generated, we must build this lib first before starting to compile the other source code that uses ONNX protobuf types.
+ # The other libs do not have the problem. All the sources are already there. We can compile them in any order.
+ set(onnxruntime_EXTERNAL_DEPENDENCIES onnx_proto flatbuffers::flatbuffers)
+diff --git a/cmake/onnxruntime_common.cmake b/cmake/onnxruntime_common.cmake
+index 0410d3361c..6b2c24fff1 100644
+--- a/cmake/onnxruntime_common.cmake
++++ b/cmake/onnxruntime_common.cmake
+@@ -107,7 +107,7 @@ if(NOT onnxruntime_DISABLE_ABSEIL)
+   endif()
+ endif()
+ 
+-onnxruntime_add_include_to_target(onnxruntime_common date_interface WIL::WIL)
++onnxruntime_add_include_to_target(onnxruntime_common date_interface)
+ target_include_directories(onnxruntime_common
+     PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${ONNXRUNTIME_ROOT} ${eigen_INCLUDE_DIRS}
+     # propagate include directories of dependencies that are part of public interface
+diff --git a/cmake/onnxruntime_graph.cmake b/cmake/onnxruntime_graph.cmake
+index 4785d3ed3a..ddc431a842 100644
+--- a/cmake/onnxruntime_graph.cmake
++++ b/cmake/onnxruntime_graph.cmake
+@@ -87,7 +87,7 @@ endif()
+ 
+ onnxruntime_add_static_library(onnxruntime_graph ${onnxruntime_graph_lib_src})
+ add_dependencies(onnxruntime_graph onnx_proto flatbuffers::flatbuffers)
+-onnxruntime_add_include_to_target(onnxruntime_graph onnxruntime_common WIL::WIL onnx onnx_proto ${PROTOBUF_LIB} flatbuffers::flatbuffers safeint_interface Boost::mp11)
++onnxruntime_add_include_to_target(onnxruntime_graph onnxruntime_common onnx onnx_proto ${PROTOBUF_LIB} flatbuffers::flatbuffers safeint_interface Boost::mp11)
+ 
+ if (MSVC)
+   set(ONNX_PROTOBUF_NATVIS_FILE "onnx_protobuf.natvis")
+diff --git a/cmake/onnxruntime_providers.cmake b/cmake/onnxruntime_providers.cmake
+index 2839713406..f67c29ddac 100644
+--- a/cmake/onnxruntime_providers.cmake
++++ b/cmake/onnxruntime_providers.cmake
+@@ -1207,7 +1207,7 @@ if (onnxruntime_USE_DML)
+   source_group(TREE ${ONNXRUNTIME_ROOT}/core FILES ${onnxruntime_providers_dml_cc_srcs})
+   onnxruntime_add_static_library(onnxruntime_providers_dml ${onnxruntime_providers_dml_cc_srcs})
+   onnxruntime_add_include_to_target(onnxruntime_providers_dml
+-    onnxruntime_common onnxruntime_framework onnx onnx_proto ${PROTOBUF_LIB} flatbuffers::flatbuffers Boost::mp11 safeint_interface WIL::WIL
++    onnxruntime_common onnxruntime_framework onnx onnx_proto ${PROTOBUF_LIB} flatbuffers::flatbuffers Boost::mp11 safeint_interface
+   )
+   add_dependencies(onnxruntime_providers_dml ${onnxruntime_EXTERNAL_DEPENDENCIES})
+   target_include_directories(onnxruntime_providers_dml PRIVATE
