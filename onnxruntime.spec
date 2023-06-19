@@ -32,6 +32,8 @@ Patch8:     versioned-onnxruntime_providers_shared.patch
 Patch9:     gcc-false-positive.patch
 # Test data not available 
 Patch10:    disable-pytorch-tests.patch
+# Use the system date and boost
+Patch11:    system-date-and-mp11.patch
 
 # MLAS is not implemented for s390x
 # https://github.com/microsoft/onnxruntime/blob/master/cmake/onnxruntime_mlas.cmake#L222
