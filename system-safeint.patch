@@ -1,0 +1,47 @@
+commit 9d21e6fb7919129267995994a4d1d00ec651d422
+Author: Alejandro Alvarez Ayllon <a.alvarezayllon@gmail.com>
+Date:   Mon Jun 19 13:26:57 2023 +0000
+
+    safeint
+
+diff --git a/cmake/external/onnxruntime_external_deps.cmake b/cmake/external/onnxruntime_external_deps.cmake
+index 99de683bd1..ba7789fd9e 100644
+--- a/cmake/external/onnxruntime_external_deps.cmake
++++ b/cmake/external/onnxruntime_external_deps.cmake
+@@ -282,14 +282,8 @@ else()
+   )
+ endif()
+ 
+-FetchContent_Declare(
+-    safeint
+-    URL ${DEP_URL_safeint}
+-    URL_HASH SHA1=${DEP_SHA1_safeint}
+-)
+-
+ # The next line will generate an error message "fatal: not a git repository", but it is ok. It is from flatbuffers
+-onnxruntime_fetchcontent_makeavailable(nlohmann_json mp11 re2 safeint GSL flatbuffers)
++onnxruntime_fetchcontent_makeavailable(nlohmann_json mp11 re2 GSL flatbuffers)
+ if(NOT flatbuffers_FOUND)
+   if(NOT TARGET flatbuffers::flatbuffers)
+     add_library(flatbuffers::flatbuffers ALIAS flatbuffers)
+@@ -413,7 +407,7 @@ set(GSL_TARGET "Microsoft.GSL::GSL")
+ set(GSL_INCLUDE_DIR "$<TARGET_PROPERTY:${GSL_TARGET},INTERFACE_INCLUDE_DIRECTORIES>")
+ 
+ add_library(safeint_interface INTERFACE)
+-target_include_directories(safeint_interface INTERFACE ${safeint_SOURCE_DIR})
++target_include_directories(safeint_interface INTERFACE /usr/include/SafeInt)
+ 
+ # XNNPACK EP
+ if (onnxruntime_USE_XNNPACK)
+diff --git a/onnxruntime/core/common/safeint.h b/onnxruntime/core/common/safeint.h
+index 3ee70f369b..0792a68d15 100644
+--- a/onnxruntime/core/common/safeint.h
++++ b/onnxruntime/core/common/safeint.h
+@@ -24,6 +24,7 @@ class SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException> {
+ 
+ #define SAFEINT_EXCEPTION_HANDLER_CPP 1
+ #define SafeIntDefaultExceptionHandler SafeIntExceptionHandler<onnxruntime::OnnxRuntimeException>
++#define SAFEINT_CPP_THROW noexcept(false)
+ 
+ #if defined(__GNUC__)
+ #include "onnxruntime_config.h"

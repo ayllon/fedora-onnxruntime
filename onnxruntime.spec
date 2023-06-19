@@ -11,7 +11,7 @@ URL:        https://github.com/microsoft/onnxruntime
 Source0:    https://github.com/microsoft/onnxruntime/archive/v%{version}/%{name}-%{version}.tar.gz
 
 # Add an option to not install the tests
-Patch0:     dont_install_tests.patch
+Patch0:     dont-install-tests.patch
 # Use the system flatbuffers
 Patch1:	    system-flatbuffers.patch
 # Use the system protobuf
@@ -19,13 +19,19 @@ Patch2:     system-protobuf.patch
 # Use the system onnx
 Patch3:     system-onnx.patch
 # Fedora targets power8 or higher
-Patch4:     disable_power10.patch
+Patch4:     disable-power10.patch
 # Do not use nsync
-Patch5:     no_nsync.patch
+Patch5:     no-nsync.patch
 # Do not link against WIL
-Patch6:      remove_wil.patch
+Patch6:     remove-wil.patch
+# Use the system safeint
+Patch7:     system-safeint.patch
 # Versioned libonnxruntime_providers_shared.so
-Patch7:     versioned_onnxruntime_providers_shared.patch
+Patch8:     versioned-onnxruntime_providers_shared.patch
+# Disable gcc -Werrors with false positives
+Patch9:     gcc-false-positive.patch
+# Test data not available 
+Patch10:    disable-pytorch-tests.patch
 
 # MLAS is not implemented for s390x
 # https://github.com/microsoft/onnxruntime/blob/master/cmake/onnxruntime_mlas.cmake#L222
@@ -86,7 +92,7 @@ Documentation files for the %{name} package
 # Overrides BUILD_SHARED_LIBS flag since onnxruntime compiles individual components as static, and links
 # all together into a single shared library when onnxruntime_BUILD_SHARED_LIB is ON.
 # The array-bounds and dangling-reference checks have false positives.
-%cmake -DCMAKE_CXX_FLAGS="-Wno-error=dangling-reference -Wno-error=array-bounds=" \
+%cmake \
     -Donnxruntime_BUILD_SHARED_LIB=ON \
     -Donnxruntime_BUILD_UNIT_TESTS=ON \
     -Donnxruntime_INSTALL_UNIT_TESTS=OFF \

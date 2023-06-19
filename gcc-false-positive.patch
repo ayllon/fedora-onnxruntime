@@ -1,0 +1,32 @@
+commit 299865ca53314bd0b20dd605a73c4c59a8463567
+Author: Alejandro Alvarez Ayllon <a.alvarezayllon@gmail.com>
+Date:   Mon Jun 19 13:48:28 2023 +0000
+
+    FP
+
+diff --git a/onnxruntime/core/providers/cpu/tensor/scatter.cc b/onnxruntime/core/providers/cpu/tensor/scatter.cc
+index f87788e8f4..416112bd32 100644
+--- a/onnxruntime/core/providers/cpu/tensor/scatter.cc
++++ b/onnxruntime/core/providers/cpu/tensor/scatter.cc
+@@ -16,6 +16,8 @@
+ #include "orttraining/training_ops/cpu/tensor/gather_elements_grad_impl.h"
+ #endif
+ 
++#pragma GCC diagnostic ignored "-Warray-bounds"
++
+ namespace onnxruntime {
+ 
+ namespace op_kernel_type_control {
+diff --git a/onnxruntime/test/framework/sparse_kernels_test.cc b/onnxruntime/test/framework/sparse_kernels_test.cc
+index 1a535144f4..d06c953772 100644
+--- a/onnxruntime/test/framework/sparse_kernels_test.cc
++++ b/onnxruntime/test/framework/sparse_kernels_test.cc
+@@ -27,6 +27,8 @@
+ #include "core/util/math_cpuonly.h"
+ #include <Eigen/SparseCore>
+ 
++#pragma GCC diagnostic ignored "-Wdangling-reference"
++
+ using namespace ONNX_NAMESPACE;
+ using namespace onnxruntime::common;
+ 
