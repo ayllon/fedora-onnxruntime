@@ -105,8 +105,9 @@ Documentation files for the %{name} package
     -Donnxruntime_BUILD_BENCHMARKS=OFF \
     -Donnxruntime_USE_PREINSTALLED_EIGEN=ON \
     -Donnxruntime_ENABLE_CPUINFO=OFF \
-    -Deigen_SOURCE_PATH=/usr/include/eigen3 \
     -Donnxruntime_DISABLE_ABSEIL=ON \
+    -Donnxruntime_ENABLE_CPUINFO=OFF \
+    -Deigen_SOURCE_PATH=/usr/include/eigen3 \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -S cmake
 %cmake_build
