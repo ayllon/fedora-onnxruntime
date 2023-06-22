@@ -38,7 +38,9 @@ Patch11:    system-date-and-mp11.patch
 # MLAS is not implemented for s390x
 # https://github.com/microsoft/onnxruntime/blob/master/cmake/onnxruntime_mlas.cmake#L222
 # The memory exhausted when building for armv7hl
-ExcludeArch:    s390x %{arm}
+# safeint flatbuffers not available in i686
+#     https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch:    s390x %{arm} %{ix86}
 
 BuildRequires:  cmake >= 3.13
 BuildRequires:  make
@@ -95,6 +97,8 @@ Documentation files for the %{name} package
 # all together into a single shared library when onnxruntime_BUILD_SHARED_LIB is ON.
 # The array-bounds and dangling-reference checks have false positives.
 %cmake \
+    -DCMAKE_INSTALL_LIBDIR=%{_lib} \
+    -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir} \
     -Donnxruntime_BUILD_SHARED_LIB=ON \
     -Donnxruntime_BUILD_UNIT_TESTS=ON \
     -Donnxruntime_INSTALL_UNIT_TESTS=OFF \
