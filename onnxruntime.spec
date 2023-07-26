@@ -42,7 +42,9 @@ Patch12:    fix_forward_decl_flatbuffers.patch
 # The memory exhausted when building for armv7hl
 # safeint flatbuffers not available in i686
 #     https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch:    s390x %{arm} %{ix86}
+# aarch64 needs pytorch cpuinfo
+#     https://bugzilla.redhat.com/show_bug.cgi?id=2181740
+ExcludeArch:    s390x %{arm} %{ix86} aarch64
 
 BuildRequires:  cmake >= 3.13
 BuildRequires:  make
