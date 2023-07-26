@@ -34,6 +34,8 @@ Patch9:     gcc-false-positive.patch
 Patch10:    disable-pytorch-tests.patch
 # Use the system date and boost
 Patch11:    system-date-and-mp11.patch
+# Remove broken forward declarations and include flatbuffers instead
+Patch12:    fix_forward_decl_flatbuffers.patch
 
 # MLAS is not implemented for s390x
 # https://github.com/microsoft/onnxruntime/blob/master/cmake/onnxruntime_mlas.cmake#L222

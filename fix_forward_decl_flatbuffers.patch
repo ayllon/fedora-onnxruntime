@@ -1,0 +1,153 @@
+diff --git a/include/onnxruntime/core/graph/graph.h b/include/onnxruntime/core/graph/graph.h
+index dc6c7d2..2a722cf 100644
+--- a/include/onnxruntime/core/graph/graph.h
++++ b/include/onnxruntime/core/graph/graph.h
+@@ -48,8 +48,9 @@
+ #include "core/graph/node_arg.h"
+ #include "core/graph/ort_format_load_options.h"
+ 
++#include <flatbuffers/flatbuffer_builder.h>
++
+ namespace flatbuffers {
+-class FlatBufferBuilder;
+ template <typename T>
+ struct Offset;
+ }  // namespace flatbuffers
+diff --git a/onnxruntime/core/flatbuffers/flatbuffers_utils.h b/onnxruntime/core/flatbuffers/flatbuffers_utils.h
+index a04bb60..37f389c 100644
+--- a/onnxruntime/core/flatbuffers/flatbuffers_utils.h
++++ b/onnxruntime/core/flatbuffers/flatbuffers_utils.h
+@@ -8,22 +8,13 @@
+ #include "core/common/common.h"
+ #include "core/common/path_string.h"
+ #include "core/common/status.h"
++#include <flatbuffers/vector.h>
++#include <flatbuffers/flatbuffer_builder.h>
+ 
+ namespace ONNX_NAMESPACE {
+ class ValueInfoProto;
+ }
+ 
+-namespace flatbuffers {
+-class FlatBufferBuilder;
+-
+-template <typename T>
+-struct Offset;
+-
+-struct String;
+-
+-template <typename T>
+-class Vector;
+-}  // namespace flatbuffers
+ 
+ namespace onnxruntime {
+ 
+@@ -57,7 +48,7 @@ onnxruntime::common::Status LoadValueInfoOrtFormat(
+     const fbs::ValueInfo& fbs_value_info, ONNX_NAMESPACE::ValueInfoProto& value_info_proto);
+ 
+ onnxruntime::common::Status LoadOpsetImportOrtFormat(
+-    const flatbuffers::Vector<flatbuffers::Offset<fbs::OperatorSetId>>* fbs_op_set_ids,
++    const flatbuffers::Vector<flatbuffers::Offset<fbs::OperatorSetId>, uint32_t>* fbs_op_set_ids,
+     std::unordered_map<std::string, int>& domain_to_version);
+ 
+ // check if filename ends in .ort
+diff --git a/onnxruntime/core/framework/kernel_type_str_resolver.h b/onnxruntime/core/framework/kernel_type_str_resolver.h
+index 6655b52..44bedb9 100644
+--- a/onnxruntime/core/framework/kernel_type_str_resolver.h
++++ b/onnxruntime/core/framework/kernel_type_str_resolver.h
+@@ -17,9 +17,9 @@
+ #include "core/graph/op_identifier.h"
+ #include "core/graph/graph.h"
+ #include "core/platform/ort_mutex.h"
++#include <flatbuffers/flatbuffer_builder.h>
+ 
+ namespace flatbuffers {
+-class FlatBufferBuilder;
+ template <typename T>
+ struct Offset;
+ }  // namespace flatbuffers
+diff --git a/onnxruntime/core/framework/session_state.h b/onnxruntime/core/framework/session_state.h
+index 502a635..10dfc09 100644
+--- a/onnxruntime/core/framework/session_state.h
++++ b/onnxruntime/core/framework/session_state.h
+@@ -43,8 +43,9 @@
+ #include "core/framework/program_region.h"
+ #endif
+ 
++#include <flatbuffers/flatbuffer_builder.h>
++
+ namespace flatbuffers {
+-class FlatBufferBuilder;
+ template <typename T>
+ struct Offset;
+ }  // namespace flatbuffers
+diff --git a/onnxruntime/core/graph/graph_flatbuffers_utils.h b/onnxruntime/core/graph/graph_flatbuffers_utils.h
+index 0088bab..bdc9053 100644
+--- a/onnxruntime/core/graph/graph_flatbuffers_utils.h
++++ b/onnxruntime/core/graph/graph_flatbuffers_utils.h
+@@ -7,6 +7,7 @@
+ 
+ #include "core/common/status.h"
+ #include "core/graph/ort_format_load_options.h"
++#include <flatbuffers/flatbuffer_builder.h>
+ 
+ namespace ONNX_NAMESPACE {
+ class AttributeProto;
+@@ -18,7 +19,6 @@ class SparseTensorProto;
+ }  // namespace ONNX_NAMESPACE
+ 
+ namespace flatbuffers {
+-class FlatBufferBuilder;
+ template <typename T>
+ struct Offset;
+ }  // namespace flatbuffers
+diff --git a/onnxruntime/core/graph/model.h b/onnxruntime/core/graph/model.h
+index bd1f53b..aedc56c 100644
+--- a/onnxruntime/core/graph/model.h
++++ b/onnxruntime/core/graph/model.h
+@@ -15,8 +15,9 @@
+ #include "core/graph/function_template.h"
+ #endif
+ 
++#include <flatbuffers/flatbuffer_builder.h>
++
+ namespace flatbuffers {
+-class FlatBufferBuilder;
+ template <typename T>
+ struct Offset;
+ }  // namespace flatbuffers
+diff --git a/onnxruntime/core/graph/op_identifier_utils.h b/onnxruntime/core/graph/op_identifier_utils.h
+index 14cec1f..73c8dcb 100644
+--- a/onnxruntime/core/graph/op_identifier_utils.h
++++ b/onnxruntime/core/graph/op_identifier_utils.h
+@@ -14,8 +14,9 @@
+ 
+ #endif  // !defined(ORT_MINIMAL_BUILD)
+ 
++#include <flatbuffers/flatbuffer_builder.h>
++
+ namespace flatbuffers {
+-class FlatBufferBuilder;
+ 
+ template <typename T>
+ struct Offset;
+diff --git a/onnxruntime/core/graph/runtime_optimization_record_container.h b/onnxruntime/core/graph/runtime_optimization_record_container.h
+index 5db784f..7fecf4a 100644
+--- a/onnxruntime/core/graph/runtime_optimization_record_container.h
++++ b/onnxruntime/core/graph/runtime_optimization_record_container.h
+@@ -12,12 +12,12 @@
+ #include "core/common/common.h"
+ #include "core/graph/runtime_optimization_record.h"
+ 
++#include <flatbuffers/flatbuffer_builder.h>
++#include <flatbuffers/vector.h>
++
+ namespace flatbuffers {
+-class FlatBufferBuilder;
+ template <typename T>
+ struct Offset;
+-template <typename T>
+-class Vector;
+ }  // namespace flatbuffers
+ 
+ namespace onnxruntime {
