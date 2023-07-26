@@ -1,6 +1,6 @@
 Summary:    A cross-platform inferencing and training accelerator
 Name:       onnxruntime
-Version:    1.15.0
+Version:    1.15.1
 Release:    1%{?dist}
 # onnxruntime and SafeInt are MIT
 # onnx is Apache License 2.0
@@ -137,6 +137,9 @@ cp --preserve=timestamps -r "./docs/" "%{buildroot}/%{_docdir}/%{name}"
 %{_docdir}/%{name}
 
 %changelog
+* Wed Jul 26 2023 Alejandro Álvarez Ayllón <a.alvarezayllon@gmail.com> - 1.15.1-1
+- Release 1.15.1
+
 * Mon Jun 05 2023 Alejandro Álvarez Ayllón <a.alvarezayllon@gmail.com> - 1.15.0-1
 - Release 1.15.0
 
